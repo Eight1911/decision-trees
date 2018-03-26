@@ -1,0 +1,5 @@
+
+
+default: 
+
+	julia main.jl
