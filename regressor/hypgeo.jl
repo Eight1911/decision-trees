@@ -1,5 +1,5 @@
-# this is the code for efficient generation 
-# of hypergeometric random variables ported 
+# this is the code for efficient generation
+# of hypergeometric random variables ported
 # from numpy.random
 
 #define M_PI 3.14159265358979323846264338328
@@ -25,7 +25,7 @@ function hypergeometric(good, bad, sample)
         gl0 = gl0 * x2 - 1.917526917526918e-03
         gl0 = gl0 * x2 + 8.417508417508418e-04
         gl0 = gl0 * x2 - 5.952380952380952e-04
-        gl0 = gl0 * x2 + 7.936507936507937e-04 
+        gl0 = gl0 * x2 + 7.936507936507937e-04
         gl0 = gl0 * x2 - 2.777777777777778e-03
         gl0 = gl0 * x2 + 8.333333333333333e-02
         gl = gl0/x0 + 0.5*log(xp) + (x0-0.5)*log(x0) - x0
@@ -57,7 +57,7 @@ function hypergeometric(good, bad, sample)
         else
             Z
         end
-    end 
+    end
 
     @inline function hypergeometric_hrua(good, bad, sample)
         mingoodbad = min(good, bad)
@@ -74,7 +74,7 @@ function hypergeometric(good, bad, sample)
         d10 = (loggam(d9+1) + loggam(mingoodbad-d9+1) + loggam(m-d9+1) +
                loggam(maxgoodbad-m+d9+1))
         d11 = min(m+1, mingoodbad+1, floor(UInt64, d6+16*d7))
-        # 16 for 16-decimal-digit precision in D1 and D2 
+        # 16 for 16-decimal-digit precision in D1 and D2
         # what the ...
 
         while true

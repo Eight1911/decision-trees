@@ -2,17 +2,16 @@
 mutable struct Node
     l           :: Node  # right child
     r           :: Node  # left child
-    
-    label       :: Float32  # most likely label
+
+    label       :: Float32 # most likely label
     feature     :: UInt32  # feature used for splitting
     threshold   :: Float32 # threshold value
     is_leaf     :: Bool
 
     depth       :: UInt32
-    region      :: UnitRange{UInt32} # a slice of the samples used to decide the split of the node
+    region      :: UnitRange{UInt32} # a slice of indX for samples that are in this node
     features    :: Array{UInt32}     # a list of features not known to be constant
 
-    # added by buid_tree
     purity      :: Float32
     split_at    :: UInt32            # index of samples
 

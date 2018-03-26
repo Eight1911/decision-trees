@@ -1,4 +1,5 @@
 module util
+
     export gini, entropy, q_bi_sort!, depth, num_nodes
 
     function loaddata(large=false)
@@ -28,12 +29,10 @@ module util
             s += k * (n - k)
         end
         return s / (n * n)
-        # return sum(k * (n - k) for k in ns) / (n * n)
     end
 
 
     @inline function entropy(ns, n)
-        # =
         s = 0.0
         log_n = log(n)
         @simd for k in ns
@@ -42,9 +41,6 @@ module util
             end
         end
         return log(n) - s / n
-        # =#
-        # return -sum(k * log(k/n) for k in ns) / n
-
     end
 
     @inline function partition!(v, w, pivot, region)

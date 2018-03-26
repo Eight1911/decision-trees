@@ -7,7 +7,7 @@ module regressor
     include("regressor/main.jl")
 end
 
-const REGRESSING = true
+const REGRESSING = false
 const lib = REGRESSING ? regressor : classifier
 
 X, Y = lib.util.loaddata()
@@ -71,7 +71,7 @@ function predict(tree, v :: Array{Float32})
         end
     end
 
-    return node.label
+    return tree.list[node.label]
 end
 
 # for classification

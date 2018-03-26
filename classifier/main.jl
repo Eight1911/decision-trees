@@ -1,19 +1,20 @@
 # What does presorting even mean ?
 # stop conditions are satisfied
-    # check stop conditions
-    # o maximum depth
-    # o minimum of samples for split
-    # o output values homogenous
-    # o input values homogenous
-    # o minimum of samples in each leaf
-    # x minimum impurity decrease
+#   check stop conditions
+#   o maximum depth
+#   o minimum of samples for split
+#   o output values homogenous
+#   o input values homogenous
+#   o minimum of samples in each leaf
+#   o minimum impurity decrease
+# 
 # all fields of node are filled
 # constants condiion is satisfied
-
+# 
 # checks :
 #   max_features < n_total_features
 #   dimensions
-
+# 
 # TODO: implement multiple output trees
 # TODO: implement weights on samples
 # TODO: add rng seeding
@@ -215,20 +216,40 @@ function check_input(X    :: Array{Float32, 2},
     end
 end
 
+function assign(Y :: Array{T}) where T<:Any
+    label_set = Set{T}()
+    for y in Y
+        push!(label_set, y)
+    end
+    label_list = collect(label_set)
+    label_dict = Dict{T, UInt32}()
+    @inbounds for i in 1:length(label_list)
+        label_dict[label_list[i]] = i
+    end
+
+    _Y = Array{UInt32}(length(Y))
+    @inbounds for i in 1:length(Y)
+        _Y[i] = label_dict[Y[i]]
+    end
+    
+    return label_list, _Y
+end
 
 function build_tree(X    :: Array{Float32, 2},
-                    Y    :: Array{UInt32, 1},
+                    Y    :: Array{T},
                     meta :: TreeMeta,
-                    stop :: StopCondition)
-    check_input(X, Y, meta, stop)
+                    stop :: StopCondition) where T <: Any
     n_samples, n_features = size(X)
+    label_list, _Y = assign(Y)
+
+    check_input(X, _Y, meta, stop)
     indX = collect(UInt64(1):UInt64(n_samples))
     stack = Node[]
 
     tree = let
         @inbounds root = Node(collect(1:n_features), 1:n_samples, 1)
         push!(stack, root)
-        Tree(meta, root)
+        Tree(meta, root, label_list)
     end
 
     ncs = (Array{UInt32}(meta.n_classes),
@@ -238,7 +259,7 @@ function build_tree(X    :: Array{Float32, 2},
            Array{UInt32}(n_samples))
     @inbounds while length(stack) > 0
         node = pop!(stack)
-        split!(X, Y, node, meta, indX, stop, ncs)
+        split!(X, _Y, node, meta, indX, stop, ncs)
         if !node.is_leaf
             fork!(node)
             push!(stack, node.r)

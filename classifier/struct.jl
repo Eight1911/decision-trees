@@ -2,7 +2,7 @@
 mutable struct Node
     l           :: Node  # right child
     r           :: Node  # left child
-    
+
     label       :: UInt32  # most likely label
     feature     :: UInt32  # feature used for splitting
     threshold   :: Float32 # threshold value
@@ -27,8 +27,8 @@ mutable struct Node
 end
 
 struct TreeMeta
-    n_classes         :: UInt32 # number of classes to predict
-    max_features   :: UInt32 # number of features to subselect
+    n_classes    :: UInt32 # number of classes to predict
+    max_features :: UInt32 # number of features to subselect
 end
 
 struct StopCondition
@@ -47,7 +47,8 @@ mutable struct FF # float float int lol
     value   :: Float32
 end
 
-mutable struct Tree
+mutable struct Tree{T}
     meta :: TreeMeta
     root :: Node
+    list :: Array{T}
 end
