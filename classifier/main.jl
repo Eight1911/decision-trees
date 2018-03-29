@@ -34,7 +34,7 @@ function split!(X    :: Array{Float32, 2},
                 meta :: TreeMeta,
                 indX :: Array{UInt64, 1},
                 stop :: StopCondition,
-                ncs  :: Tuple{Array{UInt32,1},Array{UInt32,1},Array{UInt32,1},Array{Float32,1},Array{UInt32,1}})
+                ncs  :: Tuple{Array{UInt32},Array{UInt32},Array{UInt32},Array{Float32},Array{UInt32}})
     region = node.region
     n_samples = length(region)
     n_classes = meta.n_classes
@@ -268,4 +268,3 @@ function build_tree(X    :: Array{Float32, 2},
     end
     return tree
 end
-
